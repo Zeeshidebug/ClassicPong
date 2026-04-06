@@ -1,10 +1,12 @@
-
 using UnityEngine;
+
 
 public class ballMovement : MonoBehaviour
 {
     public float speed = 10f;
     private Rigidbody2D rb;
+
+    public GameManager gameManager;
 
     void Start()
     {
@@ -28,7 +30,7 @@ public class ballMovement : MonoBehaviour
     {
         rb.linearVelocity = Vector2.zero;
         transform.position = Vector2.zero;
-        Launch();
+        Invoke("Launch", 1f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -46,6 +48,20 @@ public class ballMovement : MonoBehaviour
         {
             speed += 0.5f; // Naikin base speed
             rb.linearVelocity = rb.linearVelocity.normalized * speed;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("golKanan"))
+        {
+            // Player 1 (Kiri) dapet skor karena bola tembus ke kanan
+            gameManager.Player1Scored();
+        }
+        else if (other.CompareTag("golKiiri"))
+        {
+            // Player 2 (Kanan) dapet skor karena bola tembus ke kiri
+            gameManager.Player2Scored();
         }
     }
 }
